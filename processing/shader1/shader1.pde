@@ -15,7 +15,7 @@ float isotropy = PI;
 float orientation = 0.0;
 float wavelength = 32.0;
 float density = .02;
-float gridSize = 32;
+float gridSize = 1;
 float octaves=1;
 
 int offset = 0xfeedbeef;
@@ -25,7 +25,7 @@ float originY=0;
 void updateBuffer(){
   buffer.beginDraw();
   buffer.shader(noise);
-  noise.set("gridSize", gridSize);
+  noise.set("gridSize", gridSize*wavelength);
   noise.set("density", density);
   noise.set("origin", originX, originY);
   noise.set("offset", offset);
@@ -71,7 +71,7 @@ void setup() {
   cp5.addSlider("gridSize")
     .setPosition(4,4*sliderHeight+5*sliderSpacing)
     .setSize(noiseWidth-100, sliderHeight)
-    .setRange(4,64);
+    .setRange(0,2);
   cp5.addSlider("octaves")
     .setPosition(4,5*sliderHeight+6*sliderSpacing)
     .setSize(noiseWidth-100, sliderHeight)
