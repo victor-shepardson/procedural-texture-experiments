@@ -24,8 +24,8 @@ float originX=-noiseWidth/2;
 float originY=-noiseHeight/2;
 
 void updateBuffer(){
-  buffer.beginDraw();
-  buffer.shader(noise);
+  //buffer.beginDraw();
+  /*buffer.*/shader(noise);
   noise.set("gridSize", gridSize*wavelength);
   noise.set("density", density*pow(2,octaves-1));
   noise.set("origin", originX, originY);
@@ -34,13 +34,14 @@ void updateBuffer(){
   noise.set("harmonic",
     1./wavelength, pow(2,octaves-1)/wavelength,
     orientation-isotropy*.5, orientation+isotropy*.5);
-  buffer.rect(0, 0, buffer.width, buffer.height);
-//  originX--; originY--;
-  //buffer.resetShader();
+  //buffer.rect(0, 0, buffer.width, buffer.height);
+  originX--; originY--;
   
-  img = buffer.get(0, 0, buffer.width, buffer.height);
+  //img = buffer.get(0, 0, buffer.width, buffer.height);
   
-  buffer.endDraw();
+  //buffer.endDraw();
+  rect(0, sliderPanelHeight, noiseWidth, noiseHeight);
+  resetShader();
 }
 
 void setup() { 
@@ -85,8 +86,8 @@ void setup() {
     
   size(noiseWidth, sliderPanelHeight+noiseHeight, P2D);
   noise = loadShader("noise.glsl");
-  buffer = createGraphics(noiseWidth, noiseHeight, P2D);
-    
+  //buffer = createGraphics(noiseWidth, noiseHeight, P2D);
+  
   background(64);
   updateBuffer();
 
@@ -94,6 +95,6 @@ void setup() {
 
 void draw() {
   updateBuffer();
-  image(img,0,sliderPanelHeight);
+  //image(img,0,sliderPanelHeight);
   
 }
