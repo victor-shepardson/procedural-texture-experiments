@@ -12,11 +12,12 @@ precision mediump float;
 #define MAXPARAMS 256
 
 uniform float[MAXB] _bandwidth; //inverse side length of square grid used for evaluation
-uniform int[MAXB] _distStart; //start, length of distribution for a given bandwidth within _G
+uniform float[MAXB] _probability; //probability of each bandwidth 
+uniform int[MAXB] _distStart; //start, length of distribution for a given bandwidth within _bandwidth
 uniform int[MAXB] _distLen;
-uniform float[MAXPARAMS] _kernelFrequency; //kernel parameters (frequency, orientation)
+uniform float[MAXPARAMS] _kernelFrequency; //kernel parameters
 uniform float[MAXPARAMS] _kernelOrientation; 
-uniform int[MAXPARAMS] _alias;       //and alias, cutoff for sampling discrete dist.
+uniform int[MAXPARAMS] _alias; //alias, cutoff for sampling discrete dist.
 uniform float[MAXPARAMS] _cutoff;
 uniform int _lenParams; //length of kernelParams, <= MAXPARAMS
 uniform float _density; //number of impulses / kernel area (accuracy)
@@ -27,7 +28,7 @@ uniform int _offset; //offset to rng seeds
 //mean impulses per grid cell
 float _lambda = _density/PI;
 
-float _norm = .33/(B*log2(_lambda));
+float _norm = .33/(log2(_lambda));
 
 //Borosh and Niederreiter 1983
 uint nextRand(uint lastRand){//rng
@@ -139,7 +140,7 @@ void main(void){
 	float v= 0;
 	//want to eval each bandwidth for a discrete dist. of kernel parameters and sum
 	for(int i=0; i<B; i++)
-		v += noise(i, _lambda);
+		v += noise(i, _lambda*_probability[i]);
 	v = v*.5*_norm+.5;
 	//monochrome
 	vec3 c = vec3(v,v,v);
